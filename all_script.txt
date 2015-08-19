@@ -1,0 +1,149 @@
+create or replace package body pkg_acc_bill_ops
+as
+procedure add_credit_customer ( p_name varchar2,  p_email varchar2,  p_phone varchar2,  p_contract_no varchar2,  p_category varchar2,  p_status varchar2, 
+ p_file_format1 varchar2,p_file_format2 varchar2, p_createdby varchar2)
+ is
+ begin
+       insert into credit_card_customer values(credit_card_user_seq.nextval,p_name,p_email, p_phone,p_contract_no, p_category,p_status
+                    ,p_file_format1,p_file_format2,p_createdby,sysdate,p_createdby,sysdate );
+ 
+    commit;
+ 
+ end;
+ 
+ procedure update_credit_customer ( p_name varchar2,  p_email varchar2,  p_phone varchar2,  p_contract_no varchar2,  p_category varchar2,  p_status varchar2, 
+ p_file_format1 varchar2,p_file_format2 varchar2, p_createdby varchar2)
+ is
+ begin
+            update credit_card_customer set name_on_card=p_name,email=p_email,phone=p_phone,contract_no=p_contract_no, category=p_category,
+                       status=p_status, file_format1=p_file_format1, file_format2=p_file_format2,modified_by=p_createdby,modified_date=sysdate
+                       where email=p_email;
+                            
+ 
+    commit;
+ 
+ end;
+ 
+ 
+ procedure Add_credit_card_report ( p_name varchar2,  p_email varchar2,  p_phone varchar2,  p_contract_no varchar2, 
+  p_month varchar2, p_year   varchar2,p_file_name varchar2)
+ is
+ begin
+       insert into credit_card_report values(credit_card_rept.nextval,p_name,p_email, p_phone,p_contract_no, 
+       p_month,p_year,sysdate,p_file_name );
+ 
+    commit;
+ 
+ end;
+end;
+/
+
+=================================================================================================
+create or replace package pkg_acc_bill_ops
+as
+procedure add_credit_customer ( p_name varchar2,  p_email varchar2,  p_phone varchar2,  p_contract_no varchar2,  p_category varchar2,  p_status varchar2, 
+ p_file_format1 varchar2,p_file_format2 varchar2, p_createdby varchar2);
+  procedure update_credit_customer ( p_name varchar2,  p_email varchar2,  p_phone varchar2,  p_contract_no varchar2,  p_category varchar2,  p_status varchar2, 
+ p_file_format1 varchar2,p_file_format2 varchar2, p_createdby varchar2);
+  procedure Add_credit_card_report ( p_name varchar2,  p_email varchar2,  p_phone varchar2,  p_contract_no varchar2, 
+  p_month varchar2, p_year   varchar2,p_file_name varchar2);
+
+end;
+/
+
+============================================================================================================
+  select * from credit_card_customer 
+        where email='lukman.arogundade@unifiedpaymentsnigeria.com' or phone ='08137729363' and contract_no='CR-400000'
+        
+   select * from credit_card_customer where email='princedotexe@yahoo.coppm' or phone='6767667676pp7' or contract_no='CR-ADEMOLA'
+   
+   
+   select count(*) as counter from credit_card_customer where status=1
+   
+   
+   select * from credit_card_report;
+   
+   -------------
+   create  table user_permission
+   (
+         user_id   varchar2(30 byte) not null,
+         username  varchar2(100) not null,
+         usr_mg    varchar2(1),
+         cust_mg    varchar2(1),
+         rpt_mg    varchar2(1),
+         mail_mg    varchar2(1),
+         create_date  date
+   
+   ) 
+   -------------------------------------------------------------------------------------------
+   
+   select * from credit_card_report   where month =:v_month and year=:v_year
+   
+   select count(a.userid) as all_cust,count(b.seq_id) m_cust
+         from credit_card_customer a, credit_card_report b
+                where a.status='1' and a.email in (select email from credit_card_report where month ='July' and year ='2013')
+                        and b.month ='July' and b.year ='2013';
+                        
+ -----------------------------------------------------------------------------------------------------------------------------------
+                        
+      select count(a.userid) as all_cust
+         from credit_card_customer a
+                where b.month ='July' and b.year ='2013'
+                        group by b.month
+ -----------------------------------------------------------------------------------------------------------------------------------
+ =====================================================================================================================================
+create sequence credit_card_user_seq
+  start with 1
+  maxvalue 9999999999999999999999999999
+  minvalue 1
+  nocycle
+  cache 20
+  noorder;
+  
+  
+  create table credit_card_customer
+  (
+  
+      userid               varchar2(30 byte)       not null,
+      name_on_card         varchar2(100 byte)       ,
+      email                 varchar2(100 byte),
+      phone                 varchar2(50 byte),
+      contract_no            varchar2(50 byte),
+      category               varchar2(50 byte),
+      status                varchar2(1 byte),
+      file_format1            varchar2(100 byte),
+       file_format2           varchar2(100 byte),
+      
+      created_by             varchar2(50 byte),
+      created_date          date,
+      modified_by             varchar2(50 byte),
+      modified_date          date
+  
+  
+  )
+  
+  
+   create table credit_card_report
+   (
+    
+      seq_id               varchar2(30 byte)  not null,
+      name_on_card         varchar2(100 byte) ,
+      email                varchar2(100 byte),
+      phone                varchar2(50 byte),
+      contract_no          varchar2(50 byte),
+      month                varchar2(50 byte),
+      year                 varchar2(50 byte),
+      sent_time            date,
+      file_name            varchar2(200 byte) 
+   )
+   
+   
+   create sequence credit_card_rept
+  start with 1
+  maxvalue 9999999999999999999999999999
+  minvalue 1
+  nocycle
+  cache 20
+  noorder;
+  
+  =======================================================================================================
